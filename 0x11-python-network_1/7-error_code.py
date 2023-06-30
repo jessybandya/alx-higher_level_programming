@@ -1,15 +1,18 @@
 #!/usr/bin/python3
 """
-    Script that takes in a URL sends a POST request to that URL
-    Displays the body of the response
+script to take in a URL input, sends a request to the URL, display response
 """
-import requests
-import sys
 
 
-if __name__ == "__main__":
-    r = requests.get(sys.argv[1])
-    if r.status_code >= 400:
-        print("Error code: {}".format(r.status_code))
-    else:
-        print("{}".format(r.text))
+if __name__ == '__main__':
+    from sys import argv
+    import requests
+
+    try:
+        req = requests.get(argv[1])
+        if req:
+            print(req.content.decode('utf-8'))
+        elif req.status_code >= 400:
+            print("Error code: {}".format(req.status_code))
+    except KeyError:
+        pass
