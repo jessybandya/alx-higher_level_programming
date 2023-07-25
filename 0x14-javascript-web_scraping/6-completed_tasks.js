@@ -1,17 +1,22 @@
 #!/usr/bin/node
-// script that gets the contents of a webpage and stores it in a file.
+const request = require('request');
 
-const url = process.argv[2];
-const file = process.argv[3];
-const req = require('request');
-const fileStream = require('fs');
+const requestURL = process.argv[2];
+const users = {};
 
-req(url, function (error, response, body) {
-  if (error) {
-    console.log(error);
-  } else {
-    fileStream.writeFile(file, body, 'utf-8', (error) => {
-      if (error) console.log(error);
-    });
+request(requestURL, function (err, response, body) {
+  if (err) {
+    return console.log(err);
   }
+
+  const pBody = JSON.parse(body);
+
+  for (let i = 0; i < pBody.length; i++) {
+    const tmp = pBody[i].userId;
+    if (pBody[i].completed) {
+      users[tmp] = (users[tmp] || 0) + 1;
+    }
+  }
+
+  console.log(users);
 });
